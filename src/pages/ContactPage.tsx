@@ -4,67 +4,104 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const ContactPage = () => {
+  const { translate } = useLanguage();
+
   const officeLocations = [
     {
-      name: 'প্রধান কার্যালয়',
-      address: 'কৃষি ভবন, ৪৯-৫১ দিলকুশা বা/এ, ঢাকা-১০০০',
-      phone: '+৮৮০ ২ ৯৫৬৭৮৯১',
-      email: 'info@krishishahayok.bd',
-      hours: 'রবিবার - বৃহস্পতিবার: সকাল ৯টা - বিকাল ৫টা'
+      name: translate('Main Office', 'প্রধান কার্যালয়'),
+      address: translate(
+        'Tech Tower, 49-51 Dilkusha C/A, Dhaka-1000, Bangladesh',
+        'টেক টাওয়ার, ৪৯-৫১ দিলকুশা বা/এ, ঢাকা-১০০০, বাংলাদেশ'
+      ),
+      phone: '+880 2 9567891',
+      email: 'info@bangla-ai.com',
+      hours: translate(
+        'Sunday - Thursday: 9 AM - 5 PM',
+        'রবিবার - বৃহস্পতিবার: সকাল ৯ টা - বিকাল ৫ টা'
+      )
     },
     {
-      name: 'রংপুর শাখা',
-      address: 'কৃষি সড়ক, বদরগঞ্জ, রংপুর-৫৪৪০',
-      phone: '+৮৮০ ১৭১ ৫৬৭৮৯৪৫',
-      email: 'rangpur@krishishahayok.bd',
-      hours: 'রবিবার - বৃহস্পতিবার: সকাল ৯টা - বিকাল ৫টা'
+      name: translate('Rangpur Branch', 'রংপুর শাখা'),
+      address: translate(
+        'Technology Road, Badarganj, Rangpur-5440, Bangladesh',
+        'টেকনোলজি রোড, বদরগঞ্জ, রংপুর-৫৪৪০, বাংলাদেশ'
+      ),
+      phone: '+880 171 5678945',
+      email: 'rangpur@bangla-ai.com',
+      hours: translate(
+        'Sunday - Thursday: 9 AM - 5 PM',
+        'রবিবার - বৃহস্পতিবার: সকাল ৯ টা - বিকাল ৫ টা'
+      )
     },
     {
-      name: 'খুলনা শাখা',
-      address: 'কৃষি কমপ্লেক্স, খুলনা সদর, খুলনা-৯১০০',
-      phone: '+৮৮০ ১৯১ ৭৮৯৪৫৬৭',
-      email: 'khulna@krishishahayok.bd',
-      hours: 'রবিবার - বৃহস্পতিবার: সকাল ৯টা - বিকাল ৫টা'
+      name: translate('Khulna Branch', 'খুলনা শাখা'),
+      address: translate(
+        'Tech Complex, Khulna Sadar, Khulna-9100, Bangladesh',
+        'টেক কমপ্লেক্স, খুলনা সদর, খুলনা-৯১০০, বাংলাদেশ'
+      ),
+      phone: '+880 191 7894567',
+      email: 'khulna@bangla-ai.com',
+      hours: translate(
+        'Sunday - Thursday: 9 AM - 5 PM',
+        'রবিবার - বৃহস্পতিবার: সকাল ৯ টা - বিকাল ৫ টা'
+      )
     }
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert('আপনার বার্তা সফলভাবে পাঠানো হয়েছে। আমরা যত দ্রুত সম্ভব আপনার সাথে যোগাযোগ করব।');
+    alert(translate(
+      'Your message has been sent successfully. We will contact you as soon as possible.',
+      'আপনার বার্তা সফলভাবে পাঠানো হয়েছে। আমরা যত তাড়াতাড়ি সম্ভব আপনার সাথে যোগাযোগ করব।'
+    ));
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
       <Header />
       
-      <main className="flex-1 py-8 agricultural-light-green">
+      <main className="flex-1 py-8 bg-gray-50 dark:bg-gray-800">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-6 text-center">আমাদের সাথে যোগাযোগ করুন</h1>
-          <p className="text-lg text-center mb-8">কৃষি বিষয়ক যেকোনো প্রশ্ন বা পরামর্শের জন্য আমাদের সাথে যোগাযোগ করুন</p>
+          <h1 className="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-white">
+            {translate('Contact Us', 'যোগাযোগ করুন')}
+          </h1>
+          <p className="text-lg text-center mb-8 text-gray-700 dark:text-gray-300">
+            {translate(
+              'Get in touch with us for any questions or suggestions about our AI services',
+              'আমাদের এআই সেবা সম্পর্কে যেকোনো প্রশ্ন বা পরামর্শের জন্য আমাদের সাথে যোগাযোগ করুন'
+            )}
+          </p>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
-              <h2 className="text-2xl font-bold mb-4">বার্তা পাঠান</h2>
-              <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-sm">
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+                {translate('Send a Message', 'একটি বার্তা পাঠান')}
+              </h2>
+              <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-sm">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-1">আপনার নাম</label>
+                    <label htmlFor="name" className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+                      {translate('Your Name', 'আপনার নাম')}
+                    </label>
                     <Input 
                       id="name" 
                       type="text" 
-                      placeholder="পূর্ণ নাম লিখুন"
+                      placeholder={translate('Full Name', 'পুরো নাম')}
                       className="font-bold" 
                       required 
                     />
                   </div>
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-medium mb-1">মোবাইল নম্বর</label>
+                    <label htmlFor="phone" className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+                      {translate('Phone Number', 'ফোন নম্বর')}
+                    </label>
                     <Input 
                       id="phone" 
                       type="tel" 
-                      placeholder="০১৭XXXXXXXX"
+                      placeholder="+880 1XXXXXXXX"
                       className="font-bold" 
                       required 
                     />
@@ -72,48 +109,58 @@ const ContactPage = () => {
                 </div>
                 
                 <div className="mb-4">
-                  <label htmlFor="email" className="block text-sm font-medium mb-1">ইমেইল</label>
+                  <label htmlFor="email" className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+                    {translate('Email', 'ইমেইল')}
+                  </label>
                   <Input 
                     id="email" 
                     type="email" 
-                    placeholder="আপনার ইমেইল"
+                    placeholder={translate('Your Email', 'আপনার ইমেইল')}
                     className="font-bold" 
                     required 
                   />
                 </div>
                 
                 <div className="mb-4">
-                  <label htmlFor="subject" className="block text-sm font-medium mb-1">বিষয়</label>
+                  <label htmlFor="subject" className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+                    {translate('Subject', 'বিষয়')}
+                  </label>
                   <Input 
                     id="subject" 
                     type="text" 
-                    placeholder="বিষয় লিখুন"
+                    placeholder={translate('Enter Subject', 'বিষয় লিখুন')}
                     className="font-bold" 
                     required 
                   />
                 </div>
                 
                 <div className="mb-6">
-                  <label htmlFor="message" className="block text-sm font-medium mb-1">বার্তা</label>
+                  <label htmlFor="message" className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+                    {translate('Message', 'বার্তা')}
+                  </label>
                   <Textarea 
                     id="message" 
-                    placeholder="আপনার প্রশ্ন বা মন্তব্য লিখুন..."
+                    placeholder={translate('Type your question or comment...', 'আপনার প্রশ্ন বা মন্তব্য টাইপ করুন...')}
                     className="h-32 font-bold" 
                     required 
                   />
                 </div>
                 
-                <Button type="submit" className="agricultural-green w-full font-bold">পাঠান</Button>
+                <Button type="submit" className="bg-primary hover:bg-primary/90 text-white w-full font-bold">
+                  {translate('Send', 'পাঠান')}
+                </Button>
               </form>
             </div>
             
             <div>
-              <h2 className="text-2xl font-bold mb-4">আমাদের অফিসসমূহ</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+                {translate('Our Offices', 'আমাদের অফিসসমূহ')}
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4">
                 {officeLocations.map((office, index) => (
-                  <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
-                    <h3 className="text-xl font-bold mb-2">{office.name}</h3>
-                    <div className="space-y-2">
+                  <div key={index} className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-sm">
+                    <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">{office.name}</h3>
+                    <div className="space-y-2 text-gray-700 dark:text-gray-300">
                       <p className="flex">
                         <span className="mr-2">📍</span>
                         <span>{office.address}</span>
@@ -135,8 +182,10 @@ const ContactPage = () => {
                 ))}
               </div>
 
-              <div className="mt-6 bg-white p-6 rounded-lg shadow-sm">
-                <h3 className="text-xl font-bold mb-4">সামাজিক যোগাযোগ</h3>
+              <div className="mt-6 bg-white dark:bg-gray-700 p-6 rounded-lg shadow-sm">
+                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+                  {translate('Social Media', 'সামাজিক মাধ্যম')}
+                </h3>
                 <div className="flex space-x-4">
                   <a href="#" className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600">
                     <span className="sr-only">Facebook</span>

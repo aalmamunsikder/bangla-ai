@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
+import ModelsPage from './pages/ModelsPage';
+import ToolsPage from './pages/ToolsPage';
 import { ThemeProvider } from './components/ThemeProvider';
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,11 +12,13 @@ import NotFound from "./pages/NotFound";
 import CropsPage from "./pages/CropsPage";
 import InfoPage from "./pages/InfoPage";
 import ContactPage from "./pages/ContactPage";
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
+    <LanguageProvider>
     <ThemeProvider defaultTheme="light">
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
@@ -22,6 +26,8 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<HomePage />} />
+                <Route path="/models" element={<ModelsPage />} />
+                <Route path="/tools" element={<ToolsPage />} />
               <Route path="/crops" element={<CropsPage />} />
               <Route path="/info" element={<InfoPage />} />
               <Route path="/about" element={<AboutPage />} />
@@ -33,6 +39,7 @@ function App() {
         </TooltipProvider>
       </QueryClientProvider>
     </ThemeProvider>
+    </LanguageProvider>
   );
 }
 

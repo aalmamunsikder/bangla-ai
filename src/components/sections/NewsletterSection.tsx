@@ -3,8 +3,10 @@ import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send, Bell, CheckCircle, Sparkles, Mail } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const NewsletterSection = () => {
+  const { translate } = useLanguage();
   const [email, setEmail] = useState('');
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -14,12 +16,12 @@ const NewsletterSection = () => {
     e.preventDefault();
     
     if (!email.trim()) {
-      setError('ইমেইল ঠিকানা প্রয়োজন');
+      setError(translate('Email address is required', 'ইমেইল ঠিকানা আবশ্যক'));
       return;
     }
     
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError('একটি বৈধ ইমেইল ঠিকানা দিন');
+      setError(translate('Please provide a valid email address', 'অনুগ্রহ করে একটি বৈধ ইমেইল ঠিকানা প্রদান করুন'));
       return;
     }
     
@@ -40,10 +42,10 @@ const NewsletterSection = () => {
   };
   
   const benefits = [
-    "মৌসুমি কৃষি পরামর্শ",
-    "বীজ রোপণের সেরা সময়",
-    "নতুন কৃষি গবেষণা আপডেট",
-    "মূল্য বাজার তথ্য"
+    translate("AI industry updates", "এআই ইন্ডাস্ট্রি আপডেট"),
+    translate("New feature announcements", "নতুন ফিচার ঘোষণা"),
+    translate("Bangla language tips", "বাংলা ভাষার টিপস"),
+    translate("Case studies & success stories", "কেস স্টাডি এবং সাফল্যের গল্প")
   ];
   
   return (
@@ -114,11 +116,14 @@ const NewsletterSection = () => {
                   <div className="p-3 bg-white/20 rounded-full">
                     <Mail className="h-6 w-6" />
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold">আমাদের নিউজলেটার</h2>
+                  <h2 className="text-3xl md:text-4xl font-bold">{translate('Our Newsletter', 'আমাদের নিউজলেটার')}</h2>
                 </div>
                 
                 <p className="text-lg text-white/90 mb-6">
-                  নতুন কৃষি পরামর্শ, টিপস এবং আপডেট সবার আগে পেতে আমাদের নিউজলেটারে সাবস্ক্রাইব করুন। আমরা প্রতি সপ্তাহে মৌসুমি পরামর্শ, ফসল ব্যবস্থাপনা টিপস, এবং নতুন গবেষণা সম্পর্কে আপডেট পাঠাই।
+                  {translate(
+                    'Subscribe to our newsletter to receive the latest AI updates, tips, and news. We send weekly updates about new features, Bangla language processing improvements, and case studies showcasing how AI is transforming communication.',
+                    'সর্বশেষ এআই আপডেট, টিপস এবং খবর পেতে আমাদের নিউজলেটারে সাবস্ক্রাইব করুন। আমরা নতুন ফিচার, বাংলা ভাষা প্রসেসিং উন্নতি এবং এআই কিভাবে যোগাযোগকে রূপান্তরিত করছে তা প্রদর্শনকারী কেস স্টাডি সম্পর্কে সাপ্তাহিক আপডেট পাঠাই।'
+                  )}
                 </p>
                 
                 <div className="grid grid-cols-2 gap-3 mb-6">
@@ -131,7 +136,10 @@ const NewsletterSection = () => {
                 </div>
                 
                 <p className="text-sm text-white/70">
-                  * আমরা আপনার ব্যক্তিগত তথ্য সুরক্ষিত রাখি এবং কখনো তৃতীয় পক্ষের সাথে শেয়ার করি না।
+                  {translate(
+                    '* We keep your personal information secure and never share it with third parties.',
+                    '* আমরা আপনার ব্যক্তিগত তথ্য সুরক্ষিত রাখি এবং কখনই তৃতীয় পক্ষের সাথে শেয়ার করি না।'
+                  )}
                 </p>
               </motion.div>
               
@@ -151,19 +159,19 @@ const NewsletterSection = () => {
                     <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
                       <CheckCircle className="h-8 w-8 text-green-500" />
                     </div>
-                    <h4 className="text-xl font-bold mb-2">সাবস্ক্রিপশন সফল হয়েছে!</h4>
-                    <p className="text-green-700">আপনি আমাদের নিউজলেটার পেতে শুরু করবেন। ধন্যবাদ!</p>
+                    <h4 className="text-xl font-bold mb-2">{translate('Subscription Successful!', 'সাবস্ক্রিপশন সফল!')}</h4>
+                    <p className="text-green-700">{translate('You will start receiving our newsletter. Thank you!', 'আপনি আমাদের নিউজলেটার পেতে শুরু করবেন। ধন্যবাদ!')}</p>
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubscribe} className="bg-white/10 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-white/20">
-                    <h3 className="text-xl font-bold mb-4">আজই সাবস্ক্রাইব করুন</h3>
+                    <h3 className="text-xl font-bold mb-4">{translate('Subscribe Today', 'আজই সাবস্ক্রাইব করুন')}</h3>
                     
                     <div className="mb-4">
                       <Input 
                         type="email" 
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="আপনার ইমেইল ঠিকানা" 
+                        placeholder={translate('Your email address', 'আপনার ইমেইল ঠিকানা')} 
                         className="bg-white/20 border-white/30 text-white placeholder:text-white/50 h-12"
                       />
                       {error && <p className="text-red-200 text-sm mt-1">{error}</p>}
@@ -180,18 +188,23 @@ const NewsletterSection = () => {
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
-                          সাবস্ক্রাইব করা হচ্ছে...
+                          {translate('Subscribing...', 'সাবস্ক্রাইব করা হচ্ছে...')}
                         </span>
                       ) : (
                         <span className="flex items-center justify-center">
                           <Send className="h-4 w-4 mr-2" />
-                          সাবস্ক্রাইব করুন
+                          {translate('Subscribe', 'সাবস্ক্রাইব')}
                         </span>
                       )}
                     </Button>
                     
                     <div className="mt-4 text-center text-white/80">
-                      <p className="text-sm">প্রতি সপ্তাহে একটি নিউজলেটার, যেকোনো সময় আনসাবস্ক্রাইব করতে পারেন।</p>
+                      <p className="text-sm">
+                        {translate(
+                          'One newsletter per week, you can unsubscribe at any time.',
+                          'প্রতি সপ্তাহে একটি নিউজলেটার, আপনি যেকোনো সময় আনসাবস্ক্রাইব করতে পারেন।'
+                        )}
+                      </p>
                     </div>
                   </form>
                 )}

@@ -2,10 +2,12 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Trash, PlusCircle, MessageSquare, Clock } from "lucide-react";
 import { motion } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Conversation {
   id: string;
   title: string;
+  titleBn?: string;
   lastMessage: string;
   timestamp: Date;
 }
@@ -25,23 +27,25 @@ const ConversationHistory: React.FC<ConversationHistoryProps> = ({
   onCreateNewConversation,
   onDeleteConversation
 }) => {
+  const { translate } = useLanguage();
+  
   const formatDate = (date: Date) => {
     const today = new Date();
     const conversationDate = new Date(date);
     
     // If date is today, show time
     if (conversationDate.toDateString() === today.toDateString()) {
-      return conversationDate.toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' });
+      return conversationDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     }
     
     // If date is within the last week, show day name
     const daysDiff = Math.floor((today.getTime() - conversationDate.getTime()) / (1000 * 60 * 60 * 24));
     if (daysDiff < 7) {
-      return conversationDate.toLocaleDateString('bn-BD', { weekday: 'long' });
+      return conversationDate.toLocaleDateString('en-US', { weekday: 'long' });
     }
     
     // Otherwise show date
-    return conversationDate.toLocaleDateString('bn-BD', { day: 'numeric', month: 'short' });
+    return conversationDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
   };
 
   return (
@@ -49,7 +53,7 @@ const ConversationHistory: React.FC<ConversationHistoryProps> = ({
       <div className="p-4 bg-gradient-to-r from-primary to-green-600 text-white font-bold rounded-t-lg flex justify-between items-center">
         <div className="flex items-center gap-2">
           <MessageSquare size={18} />
-          <span>কথোপকথন ইতিহাস</span>
+          <span>{translate("Conversation History", "কথোপকথনের ইতিহাস")}</span>
         </div>
         <Button 
           variant="ghost" 
@@ -64,7 +68,7 @@ const ConversationHistory: React.FC<ConversationHistoryProps> = ({
       <div className="p-4 flex-1 overflow-y-auto">
         {conversations.length === 0 ? (
           <div className="text-center py-6 text-gray-500 dark:text-gray-400">
-            <p>কোন কথোপকথন নেই</p>
+            <p>{translate("No conversations yet", "এখনও কোন কথোপকথন নেই")}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -82,7 +86,11 @@ const ConversationHistory: React.FC<ConversationHistoryProps> = ({
                 onClick={() => onSelectConversation(conversation.id)}
               >
                 <div className="flex justify-between items-start mb-1">
-                  <h3 className="font-bold text-gray-800 dark:text-gray-200 truncate pr-8">{conversation.title}</h3>
+                  <h3 className="font-bold text-gray-800 dark:text-gray-200 truncate pr-8">
+                    {conversation.titleBn 
+                      ? translate(conversation.title, conversation.titleBn)
+                      : conversation.title}
+                  </h3>
                   <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                     <Clock size={12} className="mr-1" />
                     <span>{formatDate(conversation.timestamp)}</span>
@@ -114,7 +122,7 @@ const ConversationHistory: React.FC<ConversationHistoryProps> = ({
           className="w-full text-primary dark:text-primary-light border-primary/20 dark:border-primary/30 bg-primary/5 dark:bg-primary/10 hover:bg-primary/10 dark:hover:bg-primary/20 font-medium"
           onClick={onCreateNewConversation}
         >
-          <PlusCircle size={16} className="mr-2" /> নতুন কথোপকথন শুরু করুন
+          <PlusCircle size={16} className="mr-2" /> {translate("Start New Conversation", "নতুন কথোপকথন শুরু করুন")}
         </Button>
       </div>
     </div>

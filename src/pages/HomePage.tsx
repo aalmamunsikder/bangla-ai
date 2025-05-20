@@ -9,9 +9,10 @@ import UseCasesSection from '@/components/sections/UseCasesSection';
 import TestimonialsSection from '@/components/sections/TestimonialsSection';
 import ContactSection from '@/components/sections/ContactSection';
 import NewsletterSection from '@/components/sections/NewsletterSection';
-import { MessageSquare, ArrowDown } from 'lucide-react';
+import { MessageSquare, ArrowDown, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -24,36 +25,46 @@ interface Message {
 interface Conversation {
   id: string;
   title: string;
+  titleBn?: string;
   lastMessage: string;
   timestamp: Date;
   messages: Message[];
 }
 
 const HomePage = () => {
+  const { translate } = useLanguage();
+  
+  const welcomeMessage = translate(
+    'Welcome! I am Bangla AI, your Bengali language processing assistant. I can help with translation, text generation, summarization, and other language-related tasks. How can I assist you today?',
+    'স্বাগতম! আমি বাংলা এআই, আপনার বাংলা ভাষা প্রসেসিং সহকারী। আমি অনুবাদ, টেক্সট তৈরি, সারসংক্ষেপ এবং অন্যান্য ভাষা-সম্পর্কিত কাজে সাহায্য করতে পারি। আজ আমি আপনাকে কীভাবে সাহায্য করতে পারি?'
+  );
+
   // Sample conversations
   const [conversations, setConversations] = useState<Conversation[]>([
     {
       id: '1',
-      title: 'আলুর জন্য সারের পরিমাণ',
-      lastMessage: 'আলুর জন্য সারের পরিমাণ কত হবে?',
+      title: 'Bengali Translation',
+      titleBn: 'বাংলা অনুবাদ',
+      lastMessage: 'How do I translate this text to Bengali?',
       timestamp: new Date(),
       messages: [
         {
           role: 'assistant',
-          content: 'কোন ফসলে থোকার আক্রমণ হয়েছে? (ফসলের নাম বা আক্রমণের ধরণ জানালে নির্দিষ্ট পরামর্শ দেওয়া যাবে। যেমন: বেগুনের ডাটা ও ফল ছিদ্রকারী পোকা দমন।',
+          content: welcomeMessage,
           timestamp: new Date()
         }
       ]
     },
     {
       id: '2',
-      title: 'লোকালাইজড ফসল',
-      lastMessage: 'আমাদের এলাকায় কি ফসল হবে?',
+      title: 'Text Summarization',
+      titleBn: 'টেক্সট সারসংক্ষেপ',
+      lastMessage: 'Can you summarize this article?',
       timestamp: new Date(Date.now() - 86400000), // 1 day ago
       messages: [
         {
           role: 'assistant',
-          content: 'কোন ফসলে থোকার আক্রমণ হয়েছে? (ফসলের নাম বা আক্রমণের ধরণ জানালে নির্দিষ্ট পরামর্শ দেওয়া যাবে। যেমন: বেগুনের ডাটা ও ফল ছিদ্রকারী পোকা দমন।',
+          content: welcomeMessage,
           timestamp: new Date(Date.now() - 86400000)
         }
       ]
@@ -69,13 +80,14 @@ const HomePage = () => {
   const handleCreateNewConversation = () => {
     const newConversation: Conversation = {
       id: Date.now().toString(),
-      title: 'নতুন কথোপকথন',
+      title: 'New Conversation',
+      titleBn: 'নতুন কথোপকথন',
       lastMessage: '',
       timestamp: new Date(),
       messages: [
         {
           role: 'assistant',
-          content: 'কোন ফসলে থোকার আক্রমণ হয়েছে? (ফসলের নাম বা আক্রমণের ধরণ জানালে নির্দিষ্ট পরামর্শ দেওয়া যাবে। যেমন: বেগুনের ডাটা ও ফল ছিদ্রকারী পোকা দমন।',
+          content: welcomeMessage,
           timestamp: new Date()
         }
       ]
@@ -172,12 +184,15 @@ const HomePage = () => {
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-green-600">
-                  কৃষি সহায়ক চ্যাট
+                  {translate("Bangla AI Chat", "বাংলা এআই চ্যাট")}
                 </span>
               </h2>
             </div>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              আপনার কৃষি সম্পর্কিত প্রশ্ন জিজ্ঞাসা করুন এবং বিশেষজ্ঞ পরামর্শ পান।
+              {translate(
+                "Ask questions and get expert assistance with Bengali language processing.",
+                "প্রশ্ন করুন এবং বাংলা ভাষা প্রসেসিং-এ বিশেষজ্ঞ সহায়তা পান।"
+              )}
             </p>
           </motion.div>
           
@@ -199,8 +214,23 @@ const HomePage = () => {
             </div>
             <div className="lg:col-span-3 order-1 lg:order-2">
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
-                <div className="p-4 border-b bg-gradient-to-r from-primary to-green-600 text-white font-bold rounded-t-lg">
-                  {activeConversation?.title || 'নতুন কথোপকথন'}
+                <div className="p-4 bg-gradient-to-r from-primary to-green-600 text-white font-bold rounded-t-lg flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <MessageSquare size={18} />
+                    <span>
+                      {activeConversation?.titleBn 
+                        ? translate(activeConversation.title, activeConversation.titleBn) 
+                        : translate("New Conversation", "নতুন কথোপকথন")}
+                    </span>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/20 rounded-full w-8 h-8 p-0 flex items-center justify-center"
+                    onClick={handleCreateNewConversation}
+                  >
+                    <PlusCircle size={16} />
+                  </Button>
                 </div>
                 {activeConversation && (
                   <ChatInterface 
@@ -214,19 +244,19 @@ const HomePage = () => {
         </div>
       </section>
       
-      {/* Features Section - আমাদের বিশেষত্ব */}
+      {/* Features Section */}
       <FeaturesSection />
       
-      {/* Use Cases Section - ব্যাবহার ক্ষেত্র */}
+      {/* Use Cases Section */}
       <UseCasesSection />
       
-      {/* Testimonials Section - আমাদের ব্যবহারকারীদের মতামত */}
+      {/* Testimonials Section */}
       <TestimonialsSection />
       
-      {/* Contact Section - যোগাযোগ করুন */}
+      {/* Contact Section */}
       <ContactSection />
       
-      {/* Newsletter Section - আমাদের নিউজলেটার */}
+      {/* Newsletter Section */}
       <NewsletterSection />
       
       <Footer />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Quote, ChevronLeft, ChevronRight, MessageSquare } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Testimonial {
   id: number;
@@ -8,75 +9,90 @@ interface Testimonial {
   location: string;
   avatar: string;
   text: string;
+  textBn: string;
   rating: number;
   profession: string;
+  professionBn: string;
   date: string;
 }
 
 const testimonials: Testimonial[] = [
   {
     id: 1,
-    name: 'আব্দুল করিম',
-    location: 'রংপুর',
-    avatar: 'আ',
-    text: 'আমি পাঁচ বছর ধরে কৃষি সহায়ক ব্যবহার করছি। আমার বাদাম ফসলে রোগ দেখা দিলে অ্যাপের মাধ্যমে ছবি তুলে পাঠিয়েছিলাম। সঠিক পরামর্শ পেয়ে আমি ফসল বাঁচাতে সক্ষম হয়েছিলাম।',
+    name: 'Abdul Karim',
+    location: 'Dhaka',
+    avatar: 'A',
+    text: 'I\'ve been using Bangla AI for the past five months. When I needed help with a complex document translation, the AI provided accurate results that preserved the original meaning perfectly.',
+    textBn: 'আমি গত পাঁচ মাস ধরে বাংলা এআই ব্যবহার করছি। যখন আমার একটি জটিল ডকুমেন্ট অনুবাদে সাহায্য প্রয়োজন ছিল, এআই সঠিক ফলাফল দিয়েছে যা মূল অর্থ পুরোপুরি সংরক্ষণ করেছে।',
     rating: 5,
-    profession: 'বাদাম চাষি',
-    date: '১২ মে, ২০২৩'
+    profession: 'Translator',
+    professionBn: 'অনুবাদক',
+    date: 'May 12, 2023'
   },
   {
     id: 2,
-    name: 'সালমা আক্তার',
-    location: 'ময়মনসিংহ',
-    avatar: 'স',
-    text: 'আমি একজন নতুন কৃষক। কৃষি সহায়ক আমাকে ধাপে ধাপে শাকসবজি চাষের সঠিক পদ্ধতি শিখিয়েছে। এখন আমি নিজের বাড়ির পাশের জমিতে ভালো ফলন পাচ্ছি।',
+    name: 'Salma Akter',
+    location: 'Mymensingh',
+    avatar: 'S',
+    text: 'As a content creator, Bangla AI has helped me generate ideas and create engaging social media posts. It understands cultural context and helps me craft content that resonates with my audience.',
+    textBn: 'একজন কন্টেন্ট ক্রিয়েটর হিসাবে, বাংলা এআই আমাকে আইডিয়া তৈরি করতে এবং আকর্ষণীয় সোশ্যাল মিডিয়া পোস্ট তৈরি করতে সাহায্য করেছে। এটি সাংস্কৃতিক প্রসঙ্গ বোঝে এবং আমাকে এমন কন্টেন্ট তৈরি করতে সাহায্য করে যা আমার দর্শকদের সাথে সংযোগ স্থাপন করে।',
     rating: 5,
-    profession: 'শাকসবজি চাষি',
-    date: '২৩ জুন, ২০২৩'
+    profession: 'Content Creator',
+    professionBn: 'কন্টেন্ট ক্রিয়েটর',
+    date: 'June 23, 2023'
   },
   {
     id: 3,
-    name: 'রফিকুল ইসলাম',
-    location: 'খুলনা',
-    avatar: 'র',
-    text: 'আমার এলাকায় বন্যা হওয়ার পর কোন ফসল চাষ করা যাবে, সেই বিষয়ে কৃষি সহায়ক থেকে মূল্যবান পরামর্শ পেয়েছি। আমি এখন আবার ফসল চাষ শুরু করতে পেরেছি।',
+    name: 'Rafiqul Islam',
+    location: 'Khulna',
+    avatar: 'R',
+    text: 'After trying several AI solutions, I found Bangla AI to be uniquely adapted to understanding local dialects and expressions. This has been invaluable for my customer service team.',
+    textBn: 'বেশ কয়েকটি এআই সমাধান চেষ্টা করার পর, আমি বাংলা এআই স্থানীয় উপভাষা এবং অভিব্যক্তি বোঝার জন্য অনন্যভাবে অভিযোজিত পেয়েছি। এটি আমার কাস্টমার সার্ভিস টিমের জন্য অমূল্য হয়েছে।',
     rating: 4,
-    profession: 'মিশ্র চাষি',
-    date: '৫ জুলাই, ২০২৩'
+    profession: 'Business Owner',
+    professionBn: 'ব্যবসা মালিক',
+    date: 'July 5, 2023'
   },
   {
     id: 4,
-    name: 'জাহাঙ্গীর আলম',
-    location: 'সিলেট',
-    avatar: 'জ',
-    text: 'ধান চাষের জন্য উপযুক্ত সময় এবং সঠিক পরিচর্যা সম্পর্কে পরামর্শ পেয়ে আমি এবার রেকর্ড পরিমাণ ফলন পেয়েছি। কৃষি সহায়ক আমার জীবনে পরিবর্তন এনেছে।',
+    name: 'Jahangir Alam',
+    location: 'Sylhet',
+    avatar: 'J',
+    text: 'The educational support features have helped my students tremendously. Bangla AI explains complex concepts in simple terms and generates practice materials that are culturally relevant.',
+    textBn: 'শিক্ষামূলক সহায়তা বৈশিষ্ট্যগুলি আমার ছাত্রদের প্রচুর সাহায্য করেছে। বাংলা এআই জটিল ধারণাগুলিকে সহজ ভাষায় ব্যাখ্যা করে এবং এমন অনুশীলন উপকরণ তৈরি করে যা সাংস্কৃতিকভাবে প্রাসঙ্গিক।',
     rating: 5,
-    profession: 'ধান চাষি',
-    date: '১৮ আগস্ট, ২০২৩'
+    profession: 'Teacher',
+    professionBn: 'শিক্ষক',
+    date: 'August 18, 2023'
   },
   {
     id: 5,
-    name: 'নাজমা বেগম',
-    location: 'বরিশাল',
-    avatar: 'ন',
-    text: 'আমাদের গ্রামের মহিলা কৃষকদের জন্য এটি একটি আশীর্বাদ। এর মাধ্যমে আমরা সবজি চাষ করে স্বাবলম্বী হতে পেরেছি। সহজে ফসলের যত্ন নেওয়া এখন অনেক সহজ হয়েছে।',
+    name: 'Nazma Begum',
+    location: 'Barishal',
+    avatar: 'N',
+    text: 'For women professionals in our community, this has been a blessing. The AI helps us draft professional emails and documents in both Bangla and English, saving us time and improving communication.',
+    textBn: 'আমাদের সম্প্রদায়ের নারী পেশাদারদের জন্য, এটি আশীর্বাদ হয়েছে। এআই আমাদের বাংলা এবং ইংরেজি উভয় ভাষায় পেশাদার ইমেল এবং নথি তৈরি করতে সাহায্য করে, যা আমাদের সময় বাঁচায় এবং যোগাযোগ উন্নত করে।',
     rating: 5,
-    profession: 'সবজি চাষি',
-    date: '৩০ সেপ্টেম্বর, ২০২৩'
+    profession: 'NGO Director',
+    professionBn: 'এনজিও পরিচালক',
+    date: 'September 30, 2023'
   },
   {
     id: 6,
-    name: 'মোঃ হোসেন আলী',
-    location: 'দিনাজপুর',
-    avatar: 'মোঃ',
-    text: 'আমার ফসলে কীটনাশক ব্যবহার কমিয়ে জৈব পদ্ধতিতে চাষাবাদের জন্য কৃষি সহায়ক থেকে অনেক ভালো পরামর্শ পেয়েছি। এখন আমি স্বাস্থ্যকর ফসল উৎপাদন করছি।',
+    name: 'Mohammad Hossain',
+    location: 'Dinajpur',
+    avatar: 'M',
+    text: 'I\'ve received excellent assistance with research paper analysis and summarization from Bangla AI. It understands academic content and provides thoughtful insights that have improved my work.',
+    textBn: 'আমি বাংলা এআই থেকে গবেষণা পত্র বিশ্লেষণ এবং সারসংক্ষেপে চমৎকার সহায়তা পেয়েছি। এটি একাডেমিক বিষয়বস্তু বোঝে এবং চিন্তাশীল অন্তর্দৃষ্টি প্রদান করে যা আমার কাজ উন্নত করেছে।',
     rating: 5,
-    profession: 'আম চাষি',
-    date: '১০ অক্টোবর, ২০২৩'
+    profession: 'Researcher',
+    professionBn: 'গবেষক',
+    date: 'October 10, 2023'
   }
 ];
 
 const TestimonialsSection = () => {
+  const { translate } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
 
@@ -116,13 +132,16 @@ const TestimonialsSection = () => {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
               <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-primary to-green-600">
-                আমাদের ব্যবহারকারীদের
+                {translate("Our Users'", "আমাদের ব্যবহারকারীদের")}
               </span>
               <br />
-              <span className="text-gray-900 dark:text-white">মতামত</span>
+              <span className="text-gray-900 dark:text-white">{translate("Feedback", "মতামত")}</span>
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-              সারা দেশের হাজারো কৃষক ইতিমধ্যে কৃষি সহায়ক ব্যবহার করে উপকৃত হয়েছেন। আসুন জেনে নিই তাদের অভিজ্ঞতা।
+              {translate(
+                "Thousands of users across the country have already benefited from using Bangla AI. Let's see their experiences.",
+                "দেশজুড়ে হাজার হাজার ব্যবহারকারী ইতিমধ্যে বাংলা এআই ব্যবহার করে উপকৃত হয়েছেন। চলুন তাদের অভিজ্ঞতা দেখি।"
+              )}
             </p>
             
             {/* Rating summary */}
@@ -137,11 +156,11 @@ const TestimonialsSection = () => {
                     />
                   ))}
                 </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">গড় রেটিং</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{translate("Average Rating", "গড় রেটিং")}</p>
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold text-gray-900 dark:text-white mb-1">{testimonials.length}</div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">ব্যবহারকারীর মতামত</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{translate("User Reviews", "ব্যবহারকারী রিভিউ")}</p>
               </div>
             </div>
           </motion.div>
@@ -179,13 +198,17 @@ const TestimonialsSection = () => {
                     <div className="flex items-center gap-2">
                       <p className="text-sm text-gray-500 dark:text-gray-400">{testimonial.location}</p>
                       <span className="h-1 w-1 rounded-full bg-gray-400"></span>
-                      <p className="text-sm text-primary dark:text-primary-light">{testimonial.profession}</p>
+                      <p className="text-sm text-primary dark:text-primary-light">
+                        {translate(testimonial.profession, testimonial.professionBn)}
+                      </p>
                     </div>
                   </div>
                 </div>
                 
                 <div className="mb-6">
-                  <p className="text-gray-700 dark:text-gray-300 line-clamp-4 font-medium">"{testimonial.text}"</p>
+                  <p className="text-gray-700 dark:text-gray-300 line-clamp-4 font-medium">
+                    "{translate(testimonial.text, testimonial.textBn)}"
+                  </p>
                 </div>
                 
                 <div className="flex items-center justify-between">
@@ -207,7 +230,7 @@ const TestimonialsSection = () => {
                     setSelectedTestimonial(testimonial);
                   }}
                 >
-                  বিস্তারিত দেখুন
+                  {translate("See Details", "বিস্তারিত দেখুন")}
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </button>
               </motion.div>
@@ -246,78 +269,90 @@ const TestimonialsSection = () => {
               </div>
             </div>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-              আপনিও কৃষি সহায়ক ব্যবহার করে উপকৃত হয়েছেন?
+              {translate(
+                "Have you also benefited from using Bangla AI?",
+                "আপনিও কি বাংলা এআই ব্যবহার করে উপকৃত হয়েছেন?"
+              )}
             </h3>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-              আমাদের সাথে আপনার অভিজ্ঞতা শেয়ার করুন এবং অন্যান্য কৃষকদের সাহায্য করুন
+            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+              {translate(
+                "Share your experience and help us improve our service for everyone.",
+                "আপনার অভিজ্ঞতা শেয়ার করুন এবং সবার জন্য আমাদের সেবা উন্নত করতে সাহায্য করুন।"
+              )}
             </p>
-            <a 
-              href="#contact" 
-              className="inline-block py-4 px-8 rounded-full bg-gradient-to-r from-primary to-green-600 text-white font-bold transform transition-transform hover:scale-105 shadow-lg"
-            >
-              মতামত দিন
-            </a>
+            <button className="px-8 py-3 bg-primary hover:bg-primary/90 text-white rounded-full font-bold transition-colors shadow-lg">
+              {translate("Submit Your Feedback", "আপনার মতামত জমা দিন")}
+            </button>
           </div>
         </motion.div>
-      </div>
-      
-      {/* Testimonial detail modal */}
-      {selectedTestimonial && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto relative"
-          >
-            <button 
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-              onClick={() => setSelectedTestimonial(null)}
+        
+        {/* Testimonial Detail Modal */}
+        {selectedTestimonial && (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-20 h-20 bg-gradient-to-br from-primary to-green-500 text-white rounded-full flex items-center justify-center font-bold text-2xl shadow-md">
-                {selectedTestimonial.avatar.substring(0, 1)}
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedTestimonial.name}</h3>
-                <div className="flex items-center flex-wrap gap-2">
-                  <p className="text-gray-500 dark:text-gray-400">{selectedTestimonial.location}</p>
-                  <span className="h-1 w-1 rounded-full bg-gray-400"></span>
-                  <p className="text-primary dark:text-primary-light">{selectedTestimonial.profession}</p>
-                  <span className="h-1 w-1 rounded-full bg-gray-400"></span>
-                  <p className="text-gray-500 dark:text-gray-400">{selectedTestimonial.date}</p>
+              <button 
+                className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                onClick={() => setSelectedTestimonial(null)}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              
+              <div className="flex items-center gap-5 mb-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-primary to-green-500 text-white rounded-full flex items-center justify-center font-bold text-2xl shadow-md">
+                  {selectedTestimonial.avatar.substring(0, 1)}
+                </div>
+                <div>
+                  <h4 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedTestimonial.name}</h4>
+                  <div className="flex items-center gap-2">
+                    <p className="text-gray-500 dark:text-gray-400">{selectedTestimonial.location}</p>
+                    <span className="h-1 w-1 rounded-full bg-gray-400"></span>
+                    <p className="text-primary dark:text-primary-light">{translate(selectedTestimonial.profession, selectedTestimonial.professionBn)}</p>
+                  </div>
+                  <div className="flex mt-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        className={`h-5 w-5 ${i < selectedTestimonial.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <div className="flex mb-6">
-              {[...Array(5)].map((_, i) => (
-                <Star 
-                  key={i} 
-                  className={`h-5 w-5 ${i < selectedTestimonial.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} 
-                />
-              ))}
-            </div>
-            
-            <p className="text-lg text-gray-700 dark:text-gray-300 mb-8 relative">
-              <Quote className="absolute -top-2 -left-2 h-6 w-6 text-primary/20 dark:text-primary/30" />
-              <span className="block pl-6">{selectedTestimonial.text}</span>
-            </p>
-            
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-              <h4 className="font-bold text-gray-900 dark:text-white mb-2">কিভাবে কৃষি সহায়ক আপনাকে সাহায্য করেছে?</h4>
-              <p className="text-gray-700 dark:text-gray-300">
-                "{selectedTestimonial.name} এর মতে, কৃষি সহায়ক তাদের ফসলের উৎপাদন বাড়াতে এবং সমস্যার সমাধানে দ্রুত সাহায্য করেছে। আমরা কৃতজ্ঞ যে আমাদের পণ্য আমাদের কৃষকদের সাহায্য করছে।"
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      )}
+              
+              <div className="mb-6">
+                <p className="text-xl font-bold text-gray-900 dark:text-white mb-4">{translate("Review", "সমীক্ষা")}:</p>
+                <div className="relative p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                  <div className="absolute top-3 left-3 text-primary/10 dark:text-primary/20">
+                    <Quote className="h-8 w-8" />
+                  </div>
+                  <p className="text-gray-700 dark:text-gray-300 text-lg pl-6">
+                    "{translate(selectedTestimonial.text, selectedTestimonial.textBn)}"
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex justify-between items-center border-t border-gray-200 dark:border-gray-700 pt-4">
+                <span className="text-gray-500 dark:text-gray-400">{selectedTestimonial.date}</span>
+                <div className="flex gap-2">
+                  <button className="px-4 py-2 border border-primary/20 dark:border-primary/30 text-primary dark:text-primary-light rounded-lg hover:bg-primary/5 dark:hover:bg-primary/10 font-medium">
+                    {translate("Like", "পছন্দ")}
+                  </button>
+                  <button className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg font-medium">
+                    {translate("Share", "শেয়ার")}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </div>
     </section>
   );
 };

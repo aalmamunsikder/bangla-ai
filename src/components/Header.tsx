@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Fingerprint } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { translate } = useLanguage();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -15,39 +18,43 @@ const Header = () => {
     <header className="w-full bg-white dark:bg-gray-900 shadow-sm py-4">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-          <Link to="/" className="flex items-center space-x-2">
-            <img src="/logo.svg" alt="Krishi Sahayok Logo" className="h-8 w-8" />
-            <span className="text-xl font-bold text-primary">কৃষি সহায়ক</span>
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="relative w-10 h-10 flex items-center justify-center overflow-hidden rounded-full shadow-md bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/40 border border-primary/20 dark:border-primary/30">
+              <Fingerprint className="h-6 w-6 text-primary dark:text-primary-light" />
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-primary to-green-600 dark:from-primary-light dark:to-green-400 bg-clip-text text-transparent">Bangla AI</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link to="/" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition">
-              হোম
+              {translate('Home', 'হোম')}
             </Link>
-            <Link to="/crops" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition">
-              ফসল
+            <Link to="/models" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition">
+              {translate('AI Models', 'এআই মডেল')}
             </Link>
-            <Link to="/info" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition">
-              কৃষি তথ্য
+            <Link to="/tools" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition">
+              {translate('Tools', 'টুলস')}
             </Link>
             <Link to="/about" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition">
-              আমাদের সম্পর্কে
+              {translate('About Us', 'আমাদের সম্পর্কে')}
             </Link>
             <Link to="/contact" className="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition">
-              যোগাযোগ
+              {translate('Contact', 'যোগাযোগ')}
             </Link>
             
-            <div className="flex items-center ml-4 space-x-2">
+            <div className="flex items-center ml-4 space-x-3">
+              <LanguageSwitcher />
               <ThemeToggle />
               <Button className="agricultural-green" size="sm">
-                লগইন
+                {translate('Login', 'লগইন')}
               </Button>
             </div>
           </nav>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-4">
+          <div className="md:hidden flex items-center space-x-3">
+            <LanguageSwitcher />
             <ThemeToggle />
             <button
               onClick={toggleMenu}
@@ -72,25 +79,25 @@ const Header = () => {
                   className="block text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  হোম
+                  {translate('Home', 'হোম')}
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/crops"
+                  to="/models"
                   className="block text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  ফসল
+                  {translate('AI Models', 'এআই মডেল')}
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/info"
+                  to="/tools"
                   className="block text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  কৃষি তথ্য
+                  {translate('Tools', 'টুলস')}
                 </Link>
               </li>
               <li>
@@ -99,7 +106,7 @@ const Header = () => {
                   className="block text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  আমাদের সম্পর্কে
+                  {translate('About Us', 'আমাদের সম্পর্কে')}
                 </Link>
               </li>
               <li>
@@ -108,12 +115,12 @@ const Header = () => {
                   className="block text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary-light transition"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  যোগাযোগ
+                  {translate('Contact', 'যোগাযোগ')}
                 </Link>
               </li>
               <li>
                 <Button className="agricultural-green w-full" size="sm">
-                  লগইন
+                  {translate('Login', 'লগইন')}
                 </Button>
               </li>
             </ul>

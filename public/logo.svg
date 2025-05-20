@@ -1,12 +1,76 @@
 <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="100" cy="100" r="95" fill="#e8f5e9" stroke="#1B703D" stroke-width="10"/>
-  <path d="M100 40C100 40 60 60 60 100C60 140 100 160 100 160" stroke="#1B703D" stroke-width="12" stroke-linecap="round"/>
-  <path d="M100 40C100 40 140 60 140 100C140 140 100 160 100 160" stroke="#1B703D" stroke-width="12" stroke-linecap="round"/>
-  <path d="M100 160V180" stroke="#1B703D" stroke-width="12" stroke-linecap="round"/>
-  <circle cx="100" cy="60" r="10" fill="#1B703D"/>
-  <circle cx="120" cy="80" r="8" fill="#1B703D"/>
-  <circle cx="80" cy="80" r="8" fill="#1B703D"/>
-  <circle cx="125" cy="110" r="6" fill="#1B703D"/>
-  <circle cx="75" cy="110" r="6" fill="#1B703D"/>
-  <circle cx="100" cy="140" r="8" fill="#1B703D"/>
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e8f5e9" />
+      <stop offset="100%" stop-color="#c8e6c9" />
+    </linearGradient>
+    <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B703D" />
+      <stop offset="100%" stop-color="#15592F" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main circle with gradient fill -->
+  <circle cx="100" cy="100" r="95" fill="url(#bgGradient)" stroke="#1B703D" stroke-width="6"/>
+  
+  <!-- Brain outline shape -->
+  <path d="M65 60C65 50 75 45 85 45C95 45 100 50 100 50C100 50 105 45 115 45C125 45 135 50 135 60C135 70 130 75 130 75"
+        stroke="#1B703D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Brain main body with lobes -->
+  <path d="M70 75C60 80 55 90 55 100C55 110 60 120 70 125C75 128 80 130 80 135C80 140 75 145 75 150C75 155 80 160 90 160"
+        stroke="#1B703D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M130 75C140 80 145 90 145 100C145 110 140 120 130 125C125 128 120 130 120 135C120 140 125 145 125 150C125 155 120 160 110 160"
+        stroke="#1B703D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M90 160C95 163 105 163 110 160"
+        stroke="#1B703D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        
+  <!-- Brain folds/sulci (left hemisphere) -->
+  <path d="M65 70C65 70 70 68 75 70C80 72 80 78 75 80C70 82 68 88 70 92C72 96 80 98 85 95C90 92 95 94 95 100"
+        stroke="#1B703D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M70 105C70 105 75 103 80 105C85 107 85 113 80 115C75 117 73 123 75 127C77 131 85 133 90 130"
+        stroke="#1B703D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Brain folds/sulci (right hemisphere) -->
+  <path d="M135 70C135 70 130 68 125 70C120 72 120 78 125 80C130 82 132 88 130 92C128 96 120 98 115 95C110 92 105 94 105 100"
+        stroke="#1B703D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M130 105C130 105 125 103 120 105C115 107 115 113 120 115C125 117 127 123 125 127C123 131 115 133 110 130"
+        stroke="#1B703D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Neural nodes and connections representing AI -->
+  <circle cx="75" cy="80" r="3" fill="#1B703D"/>
+  <circle cx="85" cy="95" r="3" fill="#1B703D"/>
+  <circle cx="95" cy="100" r="3" fill="#1B703D"/>
+  <circle cx="80" cy="115" r="3" fill="#1B703D"/>
+  <circle cx="90" cy="130" r="3" fill="#1B703D"/>
+  
+  <circle cx="125" cy="80" r="3" fill="#1B703D"/>
+  <circle cx="115" cy="95" r="3" fill="#1B703D"/>
+  <circle cx="105" cy="100" r="3" fill="#1B703D"/>
+  <circle cx="120" cy="115" r="3" fill="#1B703D"/>
+  <circle cx="110" cy="130" r="3" fill="#1B703D"/>
+  
+  <!-- Connecting neural lines -->
+  <path d="M75 80L85 95L95 100M80 115L90 130" 
+        stroke="#1B703D" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M125 80L115 95L105 100M120 115L110 130" 
+        stroke="#1B703D" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M95 100L105 100M90 130L110 130" 
+        stroke="#1B703D" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Bengali-inspired decorative elements -->
+  <path d="M80 65C85 60 95 60 100 65C105 70 110 70 115 65" 
+        stroke="#1B703D" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Pulsing data flow effect -->
+  <circle cx="100" cy="83" r="3" fill="#1B703D">
+    <animate attributeName="opacity" values="1;0.5;1" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="100" cy="113" r="3" fill="#1B703D">
+    <animate attributeName="opacity" values="1;0.5;1" dur="1.5s" repeatCount="indefinite" begin="0.5s"/>
+  </circle>
+  <circle cx="100" cy="143" r="3" fill="#1B703D">
+    <animate attributeName="opacity" values="1;0.5;1" dur="1.5s" repeatCount="indefinite" begin="1s"/>
+  </circle>
 </svg> 

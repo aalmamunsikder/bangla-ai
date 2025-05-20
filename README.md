@@ -1,89 +1,81 @@
-# Welcome to your EzSite project
+# Bangla AI
 
-A clean, modern React template with TypeScript, Vite, TailwindCSS, and ShadCN UI components. This template provides a solid foundation for building web applications with best practices in mind.
+A modern AI platform for Bengali language processing with a beautiful bilingual interface.
 
-## Tech Features
+## Features
 
-- ⚡️ **Vite** - Lightning fast build tool
-- 🔥 **React 18** - Latest React features
-- 🧩 **TypeScript** - Type safety for better developer experience
-- 🎨 **TailwindCSS** - Utility-first CSS framework
-- 🧰 **ShadCN UI** - Accessible and customizable UI components
-- 📱 **Responsive Design** - Mobile-first approach
-- 🧭 **React Router** - Easy client-side routing
-- 🔄 **React Query** - Data fetching and state management
-- 🧪 **Form Handling** - React Hook Form with Zod validation
+- 🤖 AI-powered chat interface for Bengali language assistance
+- 🔄 Seamless language switching between English and Bengali
+- 🌙 Dark/light mode toggle
+- 📱 Fully responsive design for all devices
+- 🎨 Beautiful UI with gradient effects and animations
+- 📝 Conversation history with translation support
+- 🧠 Support for text generation, summarization, translation, and more
+
+## Technologies Used
+
+- **React** - Frontend library
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling and UI components
+- **Framer Motion** - Animations
+- **Lucide React** - Icons
+- **Context API** - State management
+- **React Router** - Navigation
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ 
-- npm or yarn or pnpm
+- Node.js (v14 or later)
+- npm or yarn
 
 ### Installation
 
-1. Clone this repository:
-```bash
-git clone https://github.com/your-username/react-template-project.git
-cd react-template-project
-```
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourusername/bangla-ai.git
+   cd bangla-ai
+   ```
 
-2. Install dependencies:
-```bash
-npm install
-# or
-yarn
-# or
-pnpm install
-```
+2. Install dependencies
+   ```bash
+   npm install
+   # or
+   yarn
+   ```
 
-3. Start the development server:
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+3. Start the development server
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-4. Open your browser and visit `http://localhost:5173`
+4. Open your browser and navigate to `http://localhost:5173`
 
 ## Project Structure
 
 ```
-react-template-project/
-├── public/              # Static assets
-│   ├── components/      # Reusable components
-│   │   └── ui/          # UI components from ShadCN
-│   ├── hooks/           # Custom React hooks
-│   ├── lib/             # Utility functions and libraries
-│   ├── pages/           # Page components
-│   ├── App.tsx          # Main application component
-│   ├── index.css        # Global styles
-│   └── main.tsx         # Application entry point
-├── .gitignore
-├── package.json         # Project dependencies and scripts
-├── tailwind.config.ts   # TailwindCSS configuration
-├── tsconfig.json        # TypeScript configuration
-└── vite.config.ts       # Vite configuration
+src/
+├── components/        # Reusable UI components
+│   ├── sections/      # Page sections
+│   └── ui/            # Basic UI elements
+├── contexts/          # React context providers
+├── pages/             # Page components
+├── styles/            # Global styles
+└── App.tsx            # Main application component
 ```
 
-## Customization
+## Internationalization
 
-- **Styling**: Modify `tailwind.config.ts` to customize your design tokens
-- **Components**: Add or modify components in the `src/components` directory
-- **Pages**: Create new pages in the `src/pages` directory
-- **Routing**: Update routes in `src/App.tsx`
+The application supports both English and Bengali languages. Language switching is implemented using a custom Context API solution.
 
-## Building for Production
+## License
 
-```bash
-npm run build
-# or
-yarn build
-# or
-pnpm build
-```
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-The built files will be in the `dist` directory, ready to be deployed.
+## Acknowledgments
+
+- Lucide React for the beautiful icons
+- Tailwind CSS for the utility-first styling approach
+- Framer Motion for smooth animations

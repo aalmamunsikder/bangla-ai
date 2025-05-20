@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2, Send, Copy, Trash, Paperclip, Mic, MicOff, File, Image, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -28,16 +29,21 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ 
-  initialMessages = [
-    {
-      role: 'assistant',
-      content: 'কোন ফসলে থোকার আক্রমণ হয়েছে? (ফসলের নাম বা আক্রমণের ধরণ জানালে নির্দিষ্ট পরামর্শ দেওয়া যাবে। যেমন: বেগুনের ডাটা ও ফল ছিদ্রকারী পোকা দমন।',
-      timestamp: new Date()
-    }
-  ],
+  initialMessages,
   onMessagesChange
 }) => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const { translate } = useLanguage();
+  
+  const defaultWelcomeMessage = {
+    role: 'assistant' as const,
+    content: translate(
+      'Welcome! I am Bangla AI, your Bengali language processing assistant. I can help with translation, text generation, summarization, and other language-related tasks. How can I assist you today?',
+      'স্বাগতম! আমি বাংলা এআই, আপনার বাংলা ভাষা প্রসেসিং সহকারী। আমি অনুবাদ, টেক্সট তৈরি, সারসংক্ষেপ এবং অন্যান্য ভাষা-সম্পর্কিত কাজে সাহায্য করতে পারি। আজ আমি আপনাকে কীভাবে সাহায্য করতে পারি?'
+    ),
+    timestamp: new Date()
+  };
+  
+  const [messages, setMessages] = useState<Message[]>(initialMessages || [defaultWelcomeMessage]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -91,14 +97,20 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           setIsLoading(false);
           setMessages((prev) => [...prev, {
             role: 'assistant',
-            content: 'কৃষি সহায়ক:',
+            content: translate(
+              'Bangla AI can help you with that. I can translate, summarize, or generate Bengali text based on your needs.',
+              'বাংলা এআই আপনাকে এই বিষয়ে সাহায্য করতে পারে। আমি আপনার প্রয়োজন অনুসারে বাংলা অনুবাদ, সারসংক্ষেপ বা টেক্সট তৈরি করতে পারি।'
+            ),
             timestamp: new Date()
           }]);
         } catch (error) {
           setIsLoading(false);
           setMessages((prev) => [...prev, {
             role: 'assistant',
-            content: 'দুঃখিত, একটি ত্রুটি হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+            content: translate(
+              'Sorry, an error occurred. Please try again.',
+              'দুঃখিত, একটি ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন।'
+            ),
             timestamp: new Date(),
             error: true
           }]);
@@ -109,9 +121,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    // Simple toast notification (you can implement a more robust solution)
+    // Simple toast notification
     const toastElement = document.createElement('div');
-    toastElement.innerText = 'বার্তা কপি করা হয়েছে';
+    toastElement.innerText = translate('Message copied', 'মেসেজ কপি করা হয়েছে');
     toastElement.className = 'fixed bottom-4 right-4 bg-black bg-opacity-70 text-white px-4 py-2 rounded-md';
     document.body.appendChild(toastElement);
     setTimeout(() => {
@@ -120,16 +132,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   };
 
   const clearConversation = () => {
-    const initialMessage = {
-      role: 'assistant' as const,
-      content: 'কোন ফসলে থোকার আক্রমণ হয়েছে? (ফসলের নাম বা আক্রমণের ধরণ জানালে নির্দিষ্ট পরামর্শ দেওয়া যাবে। যেমন: বেগুনের ডাটা ও ফল ছিদ্রকারী পোকা দমন।',
-      timestamp: new Date()
-    };
-    setMessages([initialMessage]);
+    setMessages([defaultWelcomeMessage]);
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
   };
   
   const formatFileSize = (bytes: number) => {
@@ -183,7 +190,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       if (recordingTime > 1) { // Only add if recording was longer than 1 second
         const voiceMessage: Message = {
           role: 'user',
-          content: '🎤 ভয়েস মেসেজ',
+          content: translate('🎤 Voice Message', '🎤 ভয়েস মেসেজ'),
           timestamp: new Date(),
           isVoiceMessage: true
         };
@@ -195,7 +202,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           setIsLoading(false);
           setMessages(prev => [...prev, {
             role: 'assistant',
-            content: 'আপনার ভয়েস মেসেজ প্রসেস করা হচ্ছে।',
+            content: translate(
+              'I received your voice message. I can transcribe and analyze Bengali speech.',
+              'আমি আপনার ভয়েস মেসেজ পেয়েছি। আমি বাংলা স্পিচ ট্রান্সক্রাইব এবং বিশ্লেষণ করতে পারি।'
+            ),
             timestamp: new Date()
           }]);
         }, 1500);
@@ -208,8 +218,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       recordingTimerRef.current = window.setInterval(() => {
         setRecordingTime(prev => prev + 1);
       }, 1000);
-      
-      // In a real app, you would request microphone permission and start recording here
     }
   };
 
@@ -229,7 +237,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
               } relative group shadow-sm`}
             >
               {message.role === 'assistant' && (
-                <div className="font-bold mb-1">কৃষি সহায়ক:</div>
+                <div className="font-bold mb-1">{translate("Bangla AI:", "বাংলা এআই:")}</div>
               )}
               
               {message.isVoiceMessage ? (
@@ -251,53 +259,47 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                       className="p-2 bg-white dark:bg-gray-700 bg-opacity-20 rounded flex items-center"
                     >
                       {attachment.type.startsWith('image/') ? (
-                        <div className="w-10 h-10 mr-2 overflow-hidden rounded">
-                          <img src={attachment.url} alt={attachment.name} className="w-full h-full object-cover" />
-                        </div>
+                        <Image size={14} className="mr-2 flex-shrink-0" />
                       ) : (
-                        <File size={24} className="mr-2" />
+                        <File size={14} className="mr-2 flex-shrink-0" />
                       )}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm truncate">{attachment.name}</p>
-                        <p className="text-xs text-gray-300 dark:text-gray-400">{formatFileSize(attachment.size)}</p>
-                      </div>
+                      <span className="text-sm truncate flex-1">
+                        {attachment.name}
+                      </span>
+                      <span className="text-xs ml-2 opacity-70">
+                        {formatFileSize(attachment.size)}
+                      </span>
                     </div>
                   ))}
                 </div>
               )}
               
-              <div className="text-xs opacity-70 mt-1 flex justify-between items-center">
+              <div className="text-xs mt-2 opacity-70 flex justify-between items-center">
                 <span>{formatTime(message.timestamp)}</span>
                 
-                {message.role === 'assistant' && !message.error && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light"
-                          onClick={() => copyToClipboard(message.content)}
-                        >
-                          <Copy size={16} />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>কপি করুন</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                {message.role === 'assistant' && (
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity flex">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="p-0 h-6 w-6 mr-1 text-current hover:bg-black/10"
+                      onClick={() => copyToClipboard(message.content)}
+                    >
+                      <Copy size={14} />
+                    </Button>
+                  </div>
                 )}
               </div>
             </div>
           ))}
           
           {isLoading && (
-            <div className="py-3 px-4 rounded-xl bg-green-50 dark:bg-green-900/20 text-gray-800 dark:text-gray-200 shadow-sm">
-              <div className="font-bold mb-1 flex items-center">
-                কৃষি সহায়ক: <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+            <div className="py-3 px-4 rounded-xl bg-green-50 dark:bg-green-900/20 text-gray-800 dark:text-gray-200">
+              <div className="font-bold mb-1">{translate("Bangla AI:", "বাংলা এআই:")}</div>
+              <div className="flex items-center">
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                <span>{translate("Thinking...", "চিন্তা করছি...")}</span>
               </div>
-              <p className="font-medium text-gray-500 dark:text-gray-400">উত্তর লিখছে...</p>
             </div>
           )}
           
@@ -305,141 +307,173 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         </div>
       </div>
       
-      {/* Attachment preview */}
       {attachments.length > 0 && (
-        <div className="px-4 mb-2">
-          <div className="flex flex-wrap gap-2">
-            {attachments.map(attachment => (
-              <div 
-                key={attachment.id} 
-                className="relative p-2 border rounded bg-gray-50 dark:bg-gray-800 dark:border-gray-700 flex items-center gap-2"
+        <div className="px-4 mb-2 flex flex-wrap gap-2">
+          {attachments.map(attachment => (
+            <div 
+              key={attachment.id}
+              className="px-3 py-1.5 bg-primary/10 dark:bg-primary/20 rounded-full flex items-center text-primary"
+            >
+              {attachment.type.startsWith('image/') ? (
+                <Image size={12} className="mr-1.5" />
+              ) : (
+                <File size={12} className="mr-1.5" />
+              )}
+              <span className="text-xs truncate max-w-[150px]">
+                {attachment.name}
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="p-0 h-5 w-5 ml-1 hover:bg-primary/20 rounded-full"
+                onClick={() => handleRemoveAttachment(attachment.id)}
               >
-                {attachment.type.startsWith('image/') ? (
-                  <Image size={16} />
-                ) : (
-                  <File size={16} />
-                )}
-                <span className="text-xs max-w-[100px] truncate">{attachment.name}</span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-4 w-4 p-0"
-                  onClick={() => handleRemoveAttachment(attachment.id)}
-                >
-                  <X size={12} />
-                </Button>
-              </div>
-            ))}
-          </div>
+                <X size={10} />
+              </Button>
+            </div>
+          ))}
         </div>
       )}
       
-      <div className="mt-auto p-4 border-t dark:border-gray-700">
-        <div className="flex items-center justify-between mb-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
-            onClick={clearConversation}
-          >
-            <Trash size={16} className="mr-1" /> কথোপকথন মুছুন
-          </Button>
-          <span className="text-xs text-gray-500 dark:text-gray-400">{messages.length - 1} বার্তা</span>
-        </div>
-        
-        {isRecording ? (
-          <div className="flex gap-2 items-center bg-red-50 dark:bg-red-900/20 p-2 rounded-md mb-2">
-            <div className="animate-pulse w-3 h-3 bg-red-500 rounded-full"></div>
-            <span className="text-red-600 dark:text-red-400 font-medium">রেকর্ডিং... {formatRecordingTime(recordingTime)}</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="ml-auto text-red-500 dark:text-red-400"
-              onClick={toggleRecording}
-            >
-              <MicOff size={18} />
-            </Button>
+      {isRecording && (
+        <div className="px-4 mb-3">
+          <div className="px-4 py-2 bg-red-500/10 text-red-600 dark:text-red-400 rounded-full flex items-center animate-pulse">
+            <Mic className="mr-2 h-4 w-4" />
+            <span className="text-sm font-medium">{translate("Recording", "রেকর্ডিং")} ({formatRecordingTime(recordingTime)})</span>
           </div>
-        ) : null}
-        
-        <div className="flex gap-2">
+        </div>
+      )}
+
+      <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center gap-2 relative">
+        <TooltipProvider>
           <div className="relative">
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-10 w-10 dark:border-gray-700 dark:bg-gray-800"
-              onClick={() => setShowAttachOptions(!showAttachOptions)}
-            >
-              <Paperclip size={18} />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-9 w-9 p-0 rounded-full"
+                  onClick={() => setShowAttachOptions(!showAttachOptions)}
+                >
+                  <Paperclip className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>{translate("Attach files", "ফাইল সংযুক্ত করুন")}</p>
+              </TooltipContent>
+            </Tooltip>
             
             {showAttachOptions && (
-              <div className="absolute bottom-full mb-2 left-0 bg-white dark:bg-gray-800 shadow-lg rounded-md p-2 border dark:border-gray-700 flex flex-col gap-2 w-48 z-10">
-                <button 
-                  className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md text-sm w-full text-left"
+              <div className="absolute bottom-full mb-2 left-0 bg-white dark:bg-gray-800 shadow-lg rounded-md p-2 border border-gray-200 dark:border-gray-700 flex flex-col gap-1">
+                <button
+                  className="flex items-center text-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                   onClick={() => {
-                    fileInputRef.current?.click();
+                    if (fileInputRef.current) fileInputRef.current.click();
                     setShowAttachOptions(false);
                   }}
                 >
-                  <File size={16} /> ফাইল সংযুক্ত করুন
+                  <File className="h-4 w-4 mr-2" />
+                  {translate("Document", "ডকুমেন্ট")}
                 </button>
-                <button 
-                  className="flex items-center gap-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md text-sm w-full text-left"
+                <button
+                  className="flex items-center text-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                   onClick={() => {
-                    imageInputRef.current?.click();
+                    if (imageInputRef.current) imageInputRef.current.click();
                     setShowAttachOptions(false);
                   }}
                 >
-                  <Image size={16} /> ছবি সংযুক্ত করুন
+                  <Image className="h-4 w-4 mr-2" />
+                  {translate("Image", "ছবি")}
                 </button>
               </div>
             )}
-            
-            <input 
-              type="file" 
-              ref={fileInputRef}
-              className="hidden"
-              onChange={handleFileChange}
-              multiple
-            />
-            <input 
-              type="file" 
-              ref={imageInputRef}
-              className="hidden"
-              accept="image/*"
-              onChange={handleFileChange}
-              multiple
-            />
           </div>
           
-          <Button
-            variant="outline"
-            size="icon"
-            className={`h-10 w-10 dark:border-gray-700 dark:bg-gray-800 ${isRecording ? 'text-red-500' : ''}`}
-            onClick={toggleRecording}
-          >
-            <Mic size={18} />
-          </Button>
-          
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="আপনার প্রশ্ন লিখুন..."
-            className="flex-1 font-medium dark:bg-gray-800 dark:border-gray-700"
-            onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()} 
-            disabled={isLoading || isRecording}
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
           />
-
-          <Button
-            onClick={handleSendMessage}
-            className="agricultural-green font-bold"
-            disabled={isLoading || isRecording || (!input.trim() && attachments.length === 0)}
-          >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4 mr-1" />}
-            পাঠান
-          </Button>
-        </div>
+          
+          <input
+            type="file"
+            ref={imageInputRef}
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`h-9 w-9 p-0 rounded-full ${
+                  isRecording ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' : ''
+                }`}
+                onClick={toggleRecording}
+              >
+                {isRecording ? (
+                  <MicOff className="h-5 w-5" />
+                ) : (
+                  <Mic className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p>{isRecording ? translate("Stop recording", "রেকর্ডিং বন্ধ করুন") : translate("Voice message", "ভয়েস মেসেজ")}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        
+        <Input
+          type="text"
+          placeholder={translate("Type your message...", "আপনার মেসেজ টাইপ করুন...")}
+          className="flex-1"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              handleSendMessage();
+            }
+          }}
+          disabled={isLoading}
+        />
+        
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className="h-9 w-9 p-0 rounded-full bg-primary hover:bg-primary/90 text-white"
+                onClick={handleSendMessage}
+                disabled={isLoading || (!input.trim() && attachments.length === 0)}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p>{translate("Send message", "মেসেজ পাঠান")}</p>
+            </TooltipContent>
+          </Tooltip>
+          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-9 w-9 p-0 rounded-full text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 absolute right-4 top-[-40px]"
+                onClick={clearConversation}
+              >
+                <Trash className="h-5 w-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p>{translate("Clear conversation", "কথোপকথন মুছুন")}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );
